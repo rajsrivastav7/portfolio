@@ -3,8 +3,8 @@ import "./globals.css";
 import Navbar from "../components/Navbar";
 
 export const metadata: Metadata = {
-  title: "Aesthetic Portfolio",
-  description: "Digital Craftsman",
+  title: "Raj Srivastav",
+  description: "Portfolio",
 };
 
 export default function RootLayout({
