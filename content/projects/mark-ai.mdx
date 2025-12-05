@@ -1,0 +1,392 @@
+---
+title: "Game Theory Negotiator"
+category: "Generative AI / Agentic AI /Reinforcement Learning"
+description: "Built an AI-powered procurement negotiation agent that runs multi-round INR negotiations end-to-end using Gemini, LangChain, and Nash Equilibrium."
+date: "2025-01-01"
+image: "/mark.jfif"
+---
+
+***
+
+## **Introducing Mark: An Autonomous AI Procurement Agent Powered by Game Theory and Reinforcement Learning**
+
+In the rapidly evolving landscape of enterprise AI, most solutions still focus on narrow generative capabilities—drafting emails, summarizing documents, or creating content.
+
+While valuable, these applications often stop short of executing complex, high-stakes business logic **autonomously**.
+
+To bridge this gap, I engineered **Mark**, an autonomous AI Procurement Negotiator designed specifically for the Indian B2B market.
+
+Mark goes beyond simple chatbots; it is a rational, strategic agent that leverages **Game Theory** (Nash Equilibrium matrices) and continuous **Reinforcement Learning** to negotiate real monetary savings end-to-end, without human intervention.
+
+---
+
+### **The Engineering Philosophy: Agentic AI vs. Generative AI**
+
+Standard **Generative AI** responds to prompts.  
+**Agentic AI** pursues goals.
+
+Mark was built with a specific directive:
+
+> **Minimize procurement costs while maintaining supplier relationships.**
+
+To achieve this, the system is designed with three distinct cognitive layers, each mirroring a capability you would expect from an expert human negotiator:
+
+1. **Perception (Market Analysis):**  
+   The ability to determine the true value of an asset in real-time, using live data instead of static assumptions.
+
+2. **Strategy (Game Theory):**  
+   The mathematical backbone that decides *how* to negotiate (Hard, Medium, or Soft stance) based on payoff structures and counterparty behaviour.
+
+3. **Memory (Reinforcement Learning):**  
+   The capacity to learn from past wins and losses and inject that learning back into future negotiations, improving over time instead of starting from zero every deal.
+
+---
+
+### **Technical Architecture & Tooling**
+
+The system is built on a robust Python stack, integrating state-of-the-art libraries for reasoning, orchestration, and memory. The goal is not just “intelligent conversation,” but **repeatable, auditable decision-making**.
+
+---
+
+#### **1. The Brain: Google Gemini 1.5 Flash & LangChain**
+
+At the core, **Google Gemini 1.5 Flash** provides the reasoning engine.
+
+I chose Flash for its combination of low latency and strong reasoning capabilities—both critical for natural, real-time negotiation where long response times would break the experience.
+
+On top of this, **LangChain** acts as the orchestration layer. Instead of generating unstructured text, Mark produces strict JSON outputs using **Pydantic** models.  
+
+Every decision—whether to counter-offer, probe for more details, hold, or walk away—is:
+
+- structured,  
+- machine-readable, and  
+- validated at runtime.
+
+This drastically reduces the chances of malformed responses and makes the agent suitable for production-grade workflows.
+
+---
+
+#### **2. The Nervous System: LangGraph**
+
+Negotiation is rarely linear. It is inherently **cyclical**, with offers, counter-offers, pauses, and restarts.
+
+To capture this, **LangGraph** orchestrates Mark’s logic as a **State Machine** rather than a simple request–response pipeline.
+
+The system loops through states such as:
+
+- analyzing the seller’s latest offer,  
+- consulting historical memory,  
+- recalculating target and walk-away ranges, and  
+- generating the next response.
+
+All of this happens while preserving the full deal history as structured state, making the conversation both **context-aware** and **traceable**.
+
+---
+
+#### **3. The Strategy Engine: Nashpy & Game Theory**
+
+This is Mark’s key differentiator.
+
+Each negotiation is modeled as a **non-cooperative game** between buyer (Mark) and seller. Before every move, Mark constructs a **3×3 Payoff Matrix** that represents possible stances:
+
+- Hard  
+- Medium  
+- Soft  
+
+against the seller’s likely moves.
+
+- **Library Used:** `Nashpy`  
+- **Logic:** The system computes the **Nash Equilibrium**—the set of strategies where no player can unilaterally improve their outcome.
+
+From this equilibrium, Mark derives a mathematically optimal **concession rate** and stance for the next move. This prevents the AI from being “talked into” a bad deal just because the human on the other side is persuasive, emotional, or aggressive.
+
+---
+
+#### **4. Real-Time Intelligence: Tavily API**
+
+Large Language Models are not reliable sources of prices—they hallucinate, average, or approximate.
+
+To ground negotiations in reality, Mark uses the **Tavily API** for live market benchmarking.
+
+**Workflow example:**
+
+- The buyer asks for *“50 MacBook Pro M3 Max”*.  
+- Mark queries live Indian retail and wholesale sources (e.g., marketplaces, B2B platforms) to estimate the **Market Value (MV)**.  
+- Using this, Mark calculates:
+  - a **Target Price** (e.g., 60% of MV), and  
+  - a strict **Walk-Away Price**.
+
+This defines a realistic **Zone of Possible Agreement (ZOPA)** so that the negotiation is anchored in real data, not in model imagination.
+
+---
+
+#### **5. Episodic Memory & Learning: FAISS**
+
+Mark implements **Retrieval-Augmented Generation (RAG)** using **FAISS (Facebook AI Similarity Search)** to build a long-term tactical memory.
+
+- Each successful tactic, argument, or negotiation pattern is vectorized and stored.  
+- When a new negotiation starts, Mark searches this vector store for similar past deals.  
+- The retrieved snippets are injected into context as proven strategies tailored to the current scenario.
+
+On startup, Mark also reads from a persistent `JSONL` deal log. From this, it computes metrics such as:
+
+- win rates of different stances,  
+- average achieved discount per stance, and  
+- seller behaviour patterns.
+
+These statistics are fed back into the Game Theory module as **bias terms**, allowing Mark to **evolve his personality mathematically** based on empirical success, not intuition.
+
+---
+
+#### **6. User Interface: Streamlit**
+
+To make Mark usable for real procurement teams—not just engineers—the entire agent is wrapped in a clean, professional **Streamlit** interface.
+
+The UI offers:
+
+- a chat-based interface where human sellers can negotiate directly with the AI, and  
+- a live sidebar dashboard showing internal metrics such as:
+  - Current Target Price  
+  - Max Budget / Walk-Away Price  
+  - Achieved Savings vs. Market Value  
+
+This makes the system both **transparent** and **trustworthy** for business stakeholders.
+
+---
+
+### **Business Impact**
+
+The true value of AI lies in **measurable outcomes**, not just impressive demos.
+
+In rigorous simulations against different seller archetypes—“Stubborn,” “Flexible,” and “Greedy”—Mark delivered:
+
+- **Cost Reduction:**  
+  Final agreed prices were consistently **15–20% below market retail value**.  
+  For a company with a ₹10 Crore annual procurement spend, this translates to approximately **₹1.5–₹2 Crore in direct bottom-line savings**.
+
+- **Operational Efficiency:**  
+  Mark takes over high-volume, low-strategic negotiations (e.g., office supplies, commodity hardware), allowing human procurement managers to focus on complex, relationship-driven deals and vendor strategy.
+
+- **Budget Discipline:**  
+  Because Mark never crosses the pre-computed **Walk-Away Price**, it eliminates emotional overpayment and enforces hard budget boundaries on every single transaction.
+
+---
+
+### **Conclusion**
+
+Mark represents a shift from “chatbots that talk” to **agents that negotiate, decide, and deliver ROI**.
+
+By combining:
+
+- the generative flexibility of modern LLMs,  
+- the mathematical rigor of **Game Theory**, and  
+- the adaptive learning of **Reinforcement-style feedback and RAG**,
+
+we can build systems that are not just conversational—but **commercially viable**.
+
+Going forward, I’m excited to apply these architectures to broader domains such as financial operations, pricing strategy, and strategic automation where every decision has direct monetary impact.
+
+***
+
+<div
+  className="mt-10 px-16 pt-14 pb-14"
+  style={{
+    fontFamily: 'Consolas, "Courier New", monospace',
+    fontWeight: 'bold',
+    border: '3px solid #000000',
+    backgroundColor: 'transparent',
+    color: '#000000',
+    fontSize: '14px',
+  }}
+>
+  {/* Header row */}
+  <div className="mb-12 flex items-baseline gap-14">
+    <div className="uppercase tracking-[0.35em]">
+      TECH STACK   
+    </div>
+
+    <a
+      href="https://github.com/your-username/your-repo"
+      target="_blank"
+      rel="noreferrer"
+      className="inline-block uppercase tracking-[0.18em] transition-colors duration-200 hover:bg-black hover:text-white"
+      style={{
+        border: '2px solid #000000',
+        padding: '0.35rem 2rem', // same as other boxes
+        backgroundColor: 'transparent',
+      }}
+    >
+      GITHUB
+    </a>
+  </div>
+
+  <div className="space-y-12">
+    {/* Core & Orchestration */}
+    <div className="flex items-baseline gap-8">
+      <div className="w-64 uppercase tracking-[0.18em]">
+        Core &amp; Orchestration
+      </div>
+      <div className="flex flex-wrap">
+        <span
+          className="inline-block uppercase tracking-[0.18em] transition-colors duration-200 hover:bg-black hover:text-white"
+          style={{
+            border: '2px solid #000000',
+            padding: '0.35rem 2rem',
+            marginRight: '2.5rem',
+            marginBottom: '2rem',
+            backgroundColor: 'transparent',
+          }}
+        >
+          Python
+        </span>
+        <span
+          className="inline-block uppercase tracking-[0.18em] transition-colors duration-200 hover:bg-black hover:text-white"
+          style={{
+            border: '2px solid #000000',
+            padding: '0.35rem 2rem',
+            marginRight: '2.5rem',
+            marginBottom: '2rem',
+            backgroundColor: 'transparent',
+          }}
+        >
+          LangChain
+        </span>
+        <span
+          className="inline-block uppercase tracking-[0.18em] transition-colors duration-200 hover:bg-black hover:text-white"
+          style={{
+            border: '2px solid #000000',
+            padding: '0.35rem 2rem',
+            marginRight: '2.5rem',
+            marginBottom: '2rem',
+            backgroundColor: 'transparent',
+          }}
+        >
+          LangGraph
+        </span>
+        <span
+          className="inline-block uppercase tracking-[0.18em] transition-colors duration-200 hover:bg-black hover:text-white"
+          style={{
+            border: '2px solid #000000',
+            padding: '0.35rem 2rem',
+            marginRight: '2.5rem',
+            marginBottom: '2rem',
+            backgroundColor: 'transparent',
+          }}
+        >
+          Pydantic
+        </span>
+      </div>
+    </div>
+
+    {/* Models & Math */}
+    <div className="flex items-baseline gap-8">
+      <div className="w-64 uppercase tracking-[0.18em]">
+        Models &amp; Math
+      </div>
+      <div className="flex flex-wrap">
+        <span
+          className="inline-block uppercase tracking-[0.18em] transition-colors duration-200 hover:bg-black hover:text-white"
+          style={{
+            border: '2px solid #000000',
+            padding: '0.35rem 2rem',
+            marginRight: '2.5rem',
+            marginBottom: '2rem',
+            backgroundColor: 'transparent',
+          }}
+        >
+          Gemini 1.5 Flash
+        </span>
+        <span
+          className="inline-block uppercase tracking-[0.18em] transition-colors duration-200 hover:bg-black hover:text-white"
+          style={{
+            border: '2px solid #000000',
+            padding: '0.35rem 2rem',
+            marginRight: '2.5rem',
+            marginBottom: '2rem',
+            backgroundColor: 'transparent',
+          }}
+        >
+          Nashpy
+        </span>
+        <span
+          className="inline-block uppercase tracking-[0.18em] transition-colors duration-200 hover:bg-black hover:text-white"
+          style={{
+            border: '2px solid #000000',
+            padding: '0.35rem 2rem',
+            marginRight: '2.5rem',
+            marginBottom: '2rem',
+            backgroundColor: 'transparent',
+          }}
+        >
+          NumPy
+        </span>
+      </div>
+    </div>
+
+    {/* Data & Search */}
+    <div className="flex items-baseline gap-8">
+      <div className="w-64 uppercase tracking-[0.18em]">
+        Data &amp; Search
+      </div>
+      <div className="flex flex-wrap">
+        <span
+          className="inline-block uppercase tracking-[0.18em] transition-colors duration-200 hover:bg-black hover:text-white"
+          style={{
+            border: '2px solid #000000',
+            padding: '0.35rem 2rem',
+            marginRight: '2.5rem',
+            marginBottom: '2rem',
+            backgroundColor: 'transparent',
+          }}
+        >
+          Tavily API
+        </span>
+        <span
+          className="inline-block uppercase tracking-[0.18em] transition-colors duration-200 hover:bg-black hover:text-white"
+          style={{
+            border: '2px solid #000000',
+            padding: '0.35rem 2rem',
+            marginRight: '2.5rem',
+            marginBottom: '2rem',
+            backgroundColor: 'transparent',
+          }}
+        >
+          FAISS
+        </span>
+        <span
+          className="inline-block uppercase tracking-[0.18em] transition-colors duration-200 hover:bg-black hover:text-white"
+          style={{
+            border: '2px solid #000000',
+            padding: '0.35rem 2rem',
+            marginRight: '2.5rem',
+            marginBottom: '2rem',
+            backgroundColor: 'transparent',
+          }}
+        >
+          JSONL Logs
+        </span>
+      </div>
+    </div>
+
+    {/* Interface */}
+    <div className="flex items-baseline gap-8">
+      <div className="w-64 uppercase tracking-[0.18em]">
+        Interface
+      </div>
+      <div className="flex flex-wrap">
+        <span
+          className="inline-block uppercase tracking-[0.18em] transition-colors duration-200 hover:bg-black hover:text-white"
+          style={{
+            border: '2px solid #000000',
+            padding: '0.35rem 2rem',
+            marginRight: '2.5rem',
+            marginBottom: '2rem',
+            backgroundColor: 'transparent',
+          }}
+        >
+          Streamlit
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
